@@ -25,5 +25,16 @@ router.post('/', (req, res) => {
     })
 })
 
+router.delete('/:id', (req, res) => {
+    const {id} = req.params
+    Data.remove(id)
+    .then(result => {
+        res.status(200).json({message: 'action deleted succesfully'})
+    })
+    .catch(error => {
+        res.status(500).json({error: "The action information could not be removed."})
+    })
+})
+
 
 module.exports = router
