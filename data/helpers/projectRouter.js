@@ -14,6 +14,17 @@ router.get('/', (req, res) => {
     })
 })
 
+router.get('/:id', (req, res) => {
+    const {id} = req.params
+    Data.getProjectActions(id)
+    .then(results => {
+        res.status(200).json(results)
+    })
+    .catch(error => {
+        res.status(500).json({error: "The projects information could not be retrieved."})
+    })
+})
+
 router.post('/', (req, res) => {
     const body = req.body
     Data.insert(body)
@@ -33,6 +44,18 @@ router.delete('/:id', (req, res) => {
     })
     .catch(error => {
         res.status(500).json({error: "The projects information could not be removed."})
+    })
+})
+
+router.put('/:id', (req, res) => {
+    const {id} = req.params
+    const changes = req.body
+    Data.update(id, changes)
+    .then(updated => {
+        res.status(200).json(updated)
+    })
+    .catch(error => {
+        res.status(500).json({ error: "The projects information could not be modified." })
     })
 })
 
