@@ -36,5 +36,17 @@ router.delete('/:id', (req, res) => {
     })
 })
 
+router.put("/:id", (req, res) => {
+    const {id} = req.params
+    const changes = req.body
+    Data.update(id, changes)
+    .then(updated => {
+        res.status(200).json(updated)
+    })
+    .catch(error => {
+        res.status(500).json({ error: "The action information could not be modified." })
+    })
+})
+
 
 module.exports = router
