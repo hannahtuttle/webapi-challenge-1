@@ -1,6 +1,7 @@
 const express = require('express')
 
 const Data = require('./actionModel.js')
+const projectDB = require('./projectModel.js')
 
 const router = express.Router()
 
@@ -14,7 +15,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
+router.post('/',validateProjectId, (req, res) => {
     let body = req.body
     Data.insert(body)
     .then(result => {
@@ -48,5 +49,22 @@ router.put("/:id", (req, res) => {
     })
 })
 
+//build custom middleware to test if project id belongs to an existing project
+function validateProjectId(req, res, next) {
+    const id = req.body.project_id
+    const body = req.body
+    console.log('req.body:'. body)
+    projectDB.get(id)
+    .then(project => {
+        console.log("project:",project)
+         if(project === null){
+             res.status(400).json({ message: "invalid project id" })
+        }
+        else{
+            next()  
+        }
+    })
+    
+};
 
 module.exports = router
